@@ -1,0 +1,16 @@
+PATH
+  remote: .
+  specs:
+    netsuite-om (0.1.0)
+      soap4r-ruby1.9
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    soap4r-ruby1.9 (2.0.5)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  netsuite-om!
