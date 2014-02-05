@@ -124,7 +124,7 @@ describe Record do
       end
 
       let(:record) do
-        double getters: %i(foo bar),
+        double getters: [:foo, :bar],
                foo: :foo,
                bar: :bar
       end
@@ -152,15 +152,15 @@ describe Record do
   describe '#setters' do
     subject { model.setters }
     it do
-      should include *%i(foo= bar= nullFieldList=
-                   xmlattr_externalId= xmlattr_internalId=)
+      should include :foo=, :bar=, :nullFieldList=,
+                   :xmlattr_externalId=, :xmlattr_internalId=
     end
   end
 
   describe '#getters' do
     subject { model.getters }
     it do
-      should include *%i(foo bar xmlattr_externalId xmlattr_internalId)
+      should include :foo, :bar, :xmlattr_externalId, :xmlattr_internalId
     end
   end
 

@@ -19,7 +19,7 @@ describe SearchRecord do
   describe '#each' do
     subject { search.each }
     let(:client) { double search: response }
-    let(:response) { %i(a b c) }
+    let(:response) { [:a, :b, :c] }
     it do
       search.response.should_receive(:each).and_yield(response)
       subject

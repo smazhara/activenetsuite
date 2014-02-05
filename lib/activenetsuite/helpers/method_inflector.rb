@@ -66,7 +66,7 @@ module MethodInflector
     end
 
     def xmlattr_getters
-      %i(internal_id external_id script_id)
+      [:internal_id, :external_id, :script_id]
     end
 
     def xmlattr_setters

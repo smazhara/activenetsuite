@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.date = '2014-02-05'
   s.description = 'Netsuite Object Mapper.'
   s.email = ['akmegran@gmail.com']
-  s.extra_rdoc_files = ['History.txt', 'Manifest.txt', 'README.rdoc']
+  s.extra_rdoc_files = ['README.rdoc']
   s.files = `git ls-files`.split("\n")
   s.homepage = 'https://github.com/smazhara/activenetsuite'
   s.licenses = ['MIT']
@@ -19,12 +19,10 @@ Gem::Specification.new do |s|
   s.rubygems_version = '2.0.3'
   s.summary = 'Netsuite Object Mapper.'
 
-    s.add_development_dependency 'hoe', ['~> 3.8']
-    s.add_development_dependency 'rspec', ['~> 2.14']
-    s.add_development_dependency 'simplecov', ['~> 0.8']
-    s.add_development_dependency 'webmock', ['~> 1.17']
+  s.add_development_dependency 'rspec', ['~> 2.14']
+  s.add_development_dependency 'simplecov', ['~> 0.8']
+  s.add_development_dependency 'webmock', ['~> 1.17']
 
-    s.add_dependency 'hoe', ['~> 3.8']
-    s.add_dependency 'soap4r-ruby1.9', ['~> 2.0.5']
-    s.add_dependency 'active_support', ['~> 3.0']
+  s.add_dependency 'soap4r-ruby1.9', ['~> 2.0.5']
+  s.add_dependency 'activesupport', ['> 3.2']
 end
