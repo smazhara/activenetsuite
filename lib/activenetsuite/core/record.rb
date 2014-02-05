@@ -34,6 +34,7 @@ class Record
     def find(id)
       find_by_id(internal_id: id) or raise_not_found_error(internal_id: id)
     end
+    alias_method :get, :find
 
     def find_by_external_id(id)
       find_by_id(external_id: id)
@@ -118,6 +119,10 @@ class Record
       ref
     end
 
+    def raise_not_found_error(arg)
+      raise NotFoundError, not_found_error_message(ref(arg))
+    end
+
     private
 
     def search
@@ -137,10 +142,6 @@ class Record
           ref(object)
         end
       end
-    end
-
-    def raise_not_found_error(arg)
-      raise NotFoundError, not_found_error_message(ref(arg))
     end
 
     def not_found_error_message(ref)

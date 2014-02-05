@@ -1,5 +1,16 @@
-require 'rspec/core/rake_task'
+require 'rubygems'
+require 'hoe'
+$:.unshift File.join(File.dirname(__FILE__), 'lib')
+require 'activenetsuite/version'
 
-RSpec::Core::RakeTask.new(:spec)
+Hoe.plugin :gemspec
+Hoe.plugin :git
 
-task :default => :spec
+Hoe.spec 'activenetsuite' do
+  developer 'Stan Mazhara', 'akmegran@gmail.com'
+
+  license 'MIT'
+
+  version = ActiveNetsuite::VERSION
+end
+
