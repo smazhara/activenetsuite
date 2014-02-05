@@ -1,5 +1,4 @@
 require 'rubygems'
-require 'hoe'
 $:.unshift File.join(File.dirname(__FILE__), 'lib')
 require 'activenetsuite/version'
 
