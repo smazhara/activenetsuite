@@ -2,3 +2,4 @@ coverage
 .ruby-version
 doc
 pkg
+.yardoc

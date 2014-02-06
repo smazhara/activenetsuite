@@ -15,7 +15,7 @@ class Record
 
   class << self
     def client
-      @@client
+      @@client ||= nil
     end
 
     def client=(client)
@@ -97,6 +97,17 @@ class Record
       client.get_deleted(get_deleted_filter)
     end
 
+    # Convert Hash or Id to RecordRef
+    # @param arg Hash or String
+    # @return RecordRef
+    # @example
+    #   ref = Record.arg(12)
+    #   ref.class # => RecordRef
+    #   ref.type # => 'record'
+    #   ref.internal_id # => 12
+    #
+    #   ref = Record.arg(external_id: 12)
+    #   ref.external_id # => 12
     def ref(arg)
       ref = RecordRef.new
       ref.type = type
