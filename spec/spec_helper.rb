@@ -1,9 +1,14 @@
 require 'simplecov'
+require 'coveralls'
+
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter
+]
 SimpleCov.start do
-  add_filter do |src|
-    src.filename.start_with? SimpleCov.root + '/lib/activenetsuite/soap/'
-  end
+  add_filter 'lib/activenetsuite/soap'
 end
+
 
 $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 $:.unshift File.expand_path(File.join(File.dirname(__FILE__)))
