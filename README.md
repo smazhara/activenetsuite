@@ -1,5 +1,7 @@
-[![Build
-Status](https://travis-ci.org/smazhara/activenetsuite.png?branch=master)](https://travis-ci.org/smazhara/activenetsuite)
+[![Build Status](https://travis-ci.org/smazhara/activenetsuite.png?branch=master)](https://travis-ci.org/smazhara/activenetsuite)
+[![Code Climate](https://codeclimate.com/github/smazhara/activenetsuite.png)](https://codeclimate.com/github/smazhara/activenetsuite)
+[![Coverage
+Status](https://coveralls.io/repos/smazhara/activenetsuite/badge.png?branch=master)](https://coveralls.io/r/smazhara/activenetsuite?branch=master)
 
 ActiveNetsuite
 ==============
