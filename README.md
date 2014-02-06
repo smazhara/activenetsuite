@@ -1,4 +1,5 @@
-![Build Status](https://travis-ci.org/smazhara/activenetsuite.png?branch=master)](https://travis-ci.org/smazhara/activenetsuite)
+[![Build
+Status](https://travis-ci.org/smazhara/activenetsuite.png?branch=master)](https://travis-ci.org/smazhara/activenetsuite)
 
 ActiveNetsuite
 ==============
