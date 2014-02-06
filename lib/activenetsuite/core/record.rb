@@ -48,19 +48,6 @@ class Record
       "::#{to_s}SearchBasic".constantize
     end
 
-    def search(search = basic_search_class.new)
-      case search
-      when SearchRecord
-        client.search(search)
-      when SearchResponse
-        client.search_next(search, search.page_index + 1)
-      when SearchMoreWithIdResponse
-        client.search_next(search, search.page_index + 1)
-      else
-        raise "Unrecognized search:#{search}"
-      end
-    end
-
     def search_next(search_result, page_index)
       client.search_next(search, page_index)
     end

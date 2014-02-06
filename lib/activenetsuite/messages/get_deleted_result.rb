@@ -8,12 +8,7 @@ class GetDeletedResult
     deletedRecordList
   end
 
-  def each
-    records.each do |record|
-      yield record if block_given?
-    end
-  end
-
+  def_delegators :records, :each
   def_delegators :status, :success?
 end
 

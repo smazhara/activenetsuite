@@ -1,7 +1,7 @@
 require 'simplecov'
 SimpleCov.start do
   add_filter do |src|
-    src.filename.start_with? SimpleCov.root + '/lib/ActiveNetsuite/soap/'
+    src.filename.start_with? SimpleCov.root + '/lib/activenetsuite/soap/'
   end
 end
 
