@@ -27,5 +27,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'i18n', '~> 0.6.9'
 
   s.add_dependency 'soap4r-ruby1.9', ['~> 2.0.5']
-  s.add_dependency 'activesupport', ['~> 3.0.0']
+  s.add_dependency 'activesupport', ['~> 3.0']
 end
