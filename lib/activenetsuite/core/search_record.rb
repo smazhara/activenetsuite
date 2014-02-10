@@ -7,13 +7,7 @@ class SearchRecord
   attr_accessor :record_class
 
   def_delegators :response, :page_index, :page_size, :search_id, :total_pages,
-    :total_records, :has_more?, :next
-
-  def each
-    response.each do |result|
-      yield result if block_given?
-    end
-  end
+    :total_records, :more?, :next, :each, :to_a
 
   def where(*args)
     dup.send(:add, *args)
@@ -23,16 +17,35 @@ class SearchRecord
     where(*args).first
   end
 
-  def to_a
-    response.to_a
-  end
-
   def inactive
-    dup.send(:add, isInactive: true)
+    where(isInactive: true)
   end
 
   def active
-    dup.send(:add, isInactive: false)
+    where(isInactive: false)
+  end
+
+  def delete(objects)
+    objects = [objects] unless objects.respond_to?(:map)
+    client.delete_list(refs(objects))
+  end
+
+  def update(records)
+    records = [records] unless records.respond_to?(:map)
+    client.update_list(records)
+  end
+
+  def deleted(op, val)
+    search_value = SearchDateField.new
+    search_value.xmlattr_operator = SearchDateFieldOperator.make(op)
+    search_value.predefinedSearchValue = SearchDate.make(val)
+
+    search_type = SearchEnumMultiSelectField.new
+    search_type.xmlattr_operator = SearchEnumMultiSelectFieldOperator::AnyOf
+    search_type.searchValue = type
+
+    get_deleted_filter = GetDeletedFilter.new(search_value, search_type)
+    client.get_deleted(get_deleted_filter)
   end
 
   def response
@@ -89,7 +102,6 @@ class SearchRecord
 
   def record_class
     @record_class
-    #"::#{self.class.to_s.gsub(/SearchBasic$/, '')}".constantize
   end
 end
 

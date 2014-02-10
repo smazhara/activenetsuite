@@ -1,20 +1,27 @@
 module ActiveNetsuite
 
 class Status
-  DUP_ITEM = 'DUP_ITEM'
-  DUP_RCRD = 'DUP_RCRD'
-  DUP_ENTITY = 'DUP_ENTITY'
-  DUP_VENDOR_NAME = 'DUP_VENDOR_NAME'
-  RCRD_TYPE_REQD = 'RCRD_TYPE_REQD'
-  USER_ERROR = 'USER_ERROR'
-  MAX_RCRDS_EXCEEDED = 'MAX_RCRDS_EXCEEDED'
-  INVALID_INTERNALID = 'INVALID_INTERNALID'
-  INVALID_FLD_VALUE = 'INVALID_FLD_VALUE'
-
-  def success?
-    xmlattr_isSuccess
+  # Make it so Status responds to error_code? style methods
+  # @param [Symbol] method name
+  # @return [Boolean]
+  # @example
+  #  status.code # => 'DUP_ITEM'
+  #  status.dup_item? # => true
+  #  status.cogs_error? # => false
+  def method_missing(method)
+    if method.to_s.end_with?('?')
+      code == method.to_s.chop.upcase
+    else
+      super
+    end
   end
 
+  # True if status is success
+  def success?
+    !!xmlattr_isSuccess
+  end
+
+  # True if status is failure
   def failure?
     !success?
   end
@@ -25,15 +32,6 @@ class Status
 
   def message
     status_detail.message if status_detail
-  end
-
-  constants.each do |constant|
-    name = (constant.to_s.underscore + '?').to_sym
-    value = const_get(constant)
-    next unless value.is_a?(String)
-    define_method name do
-      code == value
-    end
   end
 
   def duplicate?

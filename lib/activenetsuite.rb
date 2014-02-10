@@ -12,6 +12,7 @@ module NetSuite
 
   Dir.chdir(File.dirname(__FILE__)) do
     Dir[*%w(
+      activenetsuite/types/*.rb
       activenetsuite/helpers/*.rb
       activenetsuite/accounting/*.rb
       activenetsuite/core/*.rb

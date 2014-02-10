@@ -3,17 +3,9 @@ module ActiveNetsuite
 class Record
   include MethodInflector
 
-  def to_s
-    instance_variables.
-      map do |var|
-        [var, instance_variable_get(var)]
-      end.
-      select do |var, val|
-        val
-      end
-  end
-
   class << self
+    extend Forwardable
+
     def client
       @@client ||= nil
     end
@@ -48,28 +40,10 @@ class Record
       "::#{to_s}SearchBasic".constantize
     end
 
-    def search_next(search_result, page_index)
-      client.search_next(search, page_index)
-    end
-
-    def where(*args)
-      search.where(*args)
-    end
-
-    def find_by(*args)
-      search.find_by(*args)
-    end
+    def_delegators :search, :where, :find_by, :inactive, :active
 
     def all
       search.response
-    end
-
-    def inactive
-      search.inactive
-    end
-
-    def active
-      search.active
     end
 
     def delete(objects)
@@ -97,8 +71,13 @@ class Record
       client.get_deleted(get_deleted_filter)
     end
 
-    # Convert Hash or Id to RecordRef
-    # @param arg Hash or String
+    # Convert arg to RecordRef
+    # @overload ref(internal_id)
+    #   @param [String] internal_id
+    # @overload ref(hash)
+    #   @param [Hash] hash with internal_id or external_id
+    #   @option opts [String] :internal_id
+    #   @option opts [String] :external_id
     # @return RecordRef
     # @example
     #   ref = Record.arg(12)
@@ -156,8 +135,36 @@ class Record
     res
   end
 
+  def add!
+    raise_on_fail(:add)
+  end
+
   def update
     client.update(self)
+  end
+
+  def update!
+    raise_on_fail(:update)
+  end
+
+  def save
+    if new?
+      add
+    else
+      update
+    end
+  end
+
+  def save!
+    if new?
+      add!
+    else
+      update!
+    end
+  end
+
+  def new?
+    !internal_id
   end
 
   def delete
@@ -168,6 +175,10 @@ class Record
     res
   end
 
+  def delete!
+    raise_on_error(:delete)
+  end
+
   def client
     self.class.client
   end
@@ -175,9 +186,9 @@ class Record
   def load
     return self if loaded?
 
-    record = find_by_id
-    record.getters.each do |getter|
-      send :"#{getter}=", record.send(getter)
+    result = find_by_id
+    result.getters.each do |getter|
+      send :"#{getter}=", result.send(getter)
     end
     @loaded = true
     self
@@ -188,7 +199,11 @@ class Record
   end
 
   def active?
-    !inactive?
+    !is_inactive
+  end
+
+  def inactive?
+    !active?
   end
 
   def active=(value)
@@ -197,16 +212,6 @@ class Record
 
   def inactive=(value)
     self.is_inactive = !!value
-  end
-
-  def activate
-    self.active = true
-    self
-  end
-
-  def inactivate
-    self.active = false
-    self
   end
 
   def ref
@@ -222,6 +227,12 @@ class Record
   end
 
   private
+
+  def raise_on_fail(method)
+    res = send(method)
+    return res if res.success?
+    raise NetsuiteError, res
+  end
 
   def raise_not_found_error
     self.class.raise_not_found_error(ref)

@@ -1,7 +1,6 @@
 module ActiveNetsuite
 
-class NotFoundError < StandardError
-end
+class NetsuiteError < StandardError; end
+class NotFoundError < NetsuiteError; end
 
 end
-

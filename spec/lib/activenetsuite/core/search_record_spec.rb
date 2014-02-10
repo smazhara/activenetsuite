@@ -10,20 +10,12 @@ describe SearchRecord do
     search.record_class = Record
     search
   end
+  let(:client) { double search: response }
+  let(:response) { double }
 
   before do
     Record.stub(:client) { client }
     SearchRecord.stub(:inflected_method) { :foo }
-  end
-
-  describe '#each' do
-    subject { search.each }
-    let(:client) { double search: response }
-    let(:response) { [:a, :b, :c] }
-    it do
-      search.response.should_receive(:each).and_yield(response)
-      subject
-    end
   end
 
   describe '#where' do
@@ -41,9 +33,30 @@ describe SearchRecord do
       end
 
       it { should be_a SearchRecord }
+      it { should_not be search }
       its(:foo) { should be_a SearchStringField }
       its('foo.xmlattr_operator') { should eq SearchStringFieldOperator::Is }
       its('foo.searchValue') { 'bar' }
+    end
+  end
+
+  describe '#find_by' do
+    subject { search.find_by *args }
+  end
+
+  describe 'response delegators' do
+    [:page_index, :page_size, :search_id, :total_pages,
+      :total_records, :more?, :next, :each].each do |method|
+
+      describe "#{method}" do
+        subject { search.send method }
+        let(:response) { double method => value }
+        let(:value) { double }
+        specify do
+          client.should_receive(:search).with(search) { response }
+          should eq value
+        end
+      end
     end
   end
 end
