@@ -42,6 +42,11 @@ class Record
 
     def_delegators :search, :where, :find_by, :inactive, :active
 
+    def list(objects)
+      objects = [objects] unless objects.respond_to?(:map)
+      client.get_list(refs(objects))
+    end
+
     def all
       search.response
     end

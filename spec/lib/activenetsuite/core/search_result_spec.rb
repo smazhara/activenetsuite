@@ -3,8 +3,8 @@ require 'spec_helper'
 describe SearchResult do
   let(:result) { SearchResult.new }
 
-  describe '#has_more?' do
-    subject { result.has_more? }
+  describe '#more?' do
+    subject { result.more? }
     before do
       result.page_index = page_index
       result.total_pages = total_pages

@@ -105,8 +105,39 @@ describe Client do
     it do
       client.driver.should_receive(:addList) do |req|
         req.should be_a AddListRequest
-        req.should have(1).record
-        req.first.should eq recs.first
+        req.should eq recs
+        res
+      end
+      should eq res
+    end
+  end
+
+  describe '#update' do
+    subject { client.update(rec) }
+
+    let(:rec) { double }
+    let(:res) { double }
+
+    it do
+      client.driver.should_receive(:update) do |req|
+        req.should be_a UpdateRequest
+        req.record.should be rec
+        res
+      end
+      should eq res
+    end
+  end
+
+  describe '#update_list' do
+    subject { client.update_list(recs) }
+
+    let(:recs) { [double] }
+    let(:res) { double }
+
+    it do
+      client.driver.should_receive(:updateList) do |req|
+        req.should be_a UpdateListRequest
+        req.should eq recs
         res
       end
       should eq res

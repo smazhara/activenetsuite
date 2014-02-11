@@ -190,6 +190,62 @@ describe Record do
     end
   end
 
+  describe '.list' do
+    subject { described_class.list(objects) }
+
+    let(:ids) { [10, 20] }
+
+    let(:recs) do
+      ids.map do |id|
+        rec = Record.new
+        rec.internal_id = id
+        rec
+      end
+    end
+
+    let(:refs) do
+      ids.map do |id|
+        ref = RecordRef.new
+        ref.internal_id = id
+        ref.type = 'record'
+        ref
+      end
+    end
+
+    context 'when internal ids given' do
+      let(:objects) { ids }
+
+      it do
+        described_class.client.should_receive(:get_list) do |args|
+          args == refs
+        end
+        subject
+      end
+    end
+
+    context 'when Records given' do
+      let(:objects) { recs }
+
+      it do
+        described_class.client.should_receive(:get_list) do |args|
+          args == refs
+        end
+        subject
+      end
+    end
+
+    context 'when Refs given' do
+      let(:objects) { refs }
+
+      it do
+        described_class.client.should_receive(:get_list) do |args|
+          args == refs
+        end
+        subject
+      end
+    end
+  end
+
   describe '.delete' do
     subject { described_class.delete(objects) }
 

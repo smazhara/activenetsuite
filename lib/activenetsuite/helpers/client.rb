@@ -65,7 +65,7 @@ class Client
     @driver.get(GetRequest.new(ref))
   end
 
-  def get_all(refs)
+  def get_list(refs)
     @driver.getList(GetListRequest.new(refs))
   end
 

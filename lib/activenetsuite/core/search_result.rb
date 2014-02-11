@@ -3,7 +3,7 @@ module ActiveNetsuite
 class SearchResult
   include MethodInflector
 
-  def has_more?
+  def more?
     page_index < total_pages
   end
 end

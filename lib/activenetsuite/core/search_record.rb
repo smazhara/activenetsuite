@@ -25,16 +25,6 @@ class SearchRecord
     where(isInactive: false)
   end
 
-  def delete(objects)
-    objects = [objects] unless objects.respond_to?(:map)
-    client.delete_list(refs(objects))
-  end
-
-  def update(records)
-    records = [records] unless records.respond_to?(:map)
-    client.update_list(records)
-  end
-
   def deleted(op, val)
     search_value = SearchDateField.new
     search_value.xmlattr_operator = SearchDateFieldOperator.make(op)
@@ -63,7 +53,7 @@ class SearchRecord
   def add(*args)
     if args.first.is_a?(Hash)
       @method, @value = args.first.flatten
-      @op = :is
+      @op = default_operator
     end
     if args.size == 3
       @method, @op, @value = args
@@ -77,6 +67,19 @@ class SearchRecord
     send(method).searchValue = value
 
     self
+  end
+
+  def default_operator
+    case value
+    when String
+      :is
+    when Fixnum
+      :equal_to
+    when Date, DateTime
+      :on
+    else
+      raise ArgumentError, "Can't find search class for #{value.inspect}"
+    end
   end
 
   def search_class

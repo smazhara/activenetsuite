@@ -24,19 +24,42 @@ describe SearchRecord do
 
     context 'when foo: "bar" given' do
       let(:args) { [{foo: 'bar'}] }
-      let :where do
-        where = SearchRecord.new
-        where.foo = SearchStringField.new
-        where.foo.xmlattr_operator = SearchStringFieldOperator::Is
-        where.foo.searchValue = 'bar'
-        where
-      end
 
       it { should be_a SearchRecord }
       it { should_not be search }
       its(:foo) { should be_a SearchStringField }
       its('foo.xmlattr_operator') { should eq SearchStringFieldOperator::Is }
       its('foo.searchValue') { 'bar' }
+    end
+
+    context 'when foo: 10 given' do
+      let(:args) { [{foo: 10} ] }
+
+      it { should be_a SearchRecord }
+      it { should_not be search }
+      its(:foo) { should be_a SearchLongField }
+      its('foo.xmlattr_operator') { should eq SearchLongFieldOperator::EqualTo }
+      its('foo.searchValue') { 10 }
+    end
+
+    context 'when foo: Date.new(2000, 1, 2) given' do
+      let(:args) { [{foo: Date.new(2000, 1, 2)} ] }
+
+      it { should be_a SearchRecord }
+      it { should_not be search }
+      its(:foo) { should be_a SearchDateField }
+      its('foo.xmlattr_operator') { should eq SearchDateFieldOperator::On }
+      its('foo.searchValue') { Date.new(2000, 1, 2) }
+    end
+
+    context 'when :foo, :has_keywords, "key" given' do
+      let(:args) { [:foo, :has_keywords, 'key'] }
+
+      it { should be_a SearchRecord }
+      it { should_not be search }
+      its(:foo) { should be_a SearchStringField }
+      its('foo.xmlattr_operator') { should eq SearchStringFieldOperator::HasKeywords }
+      its('foo.searchValue') { 'key' }
     end
   end
 
@@ -58,6 +81,18 @@ describe SearchRecord do
         end
       end
     end
+  end
+
+  describe '#find_by' do
+    subject { search.find_by *args }
+    before do
+      search.stub(:where).with(args) { response }
+    end
+    let(:args) { double }
+    let(:response) { double first: record }
+    let(:record) { double }
+
+    it { should eq record }
   end
 end
 

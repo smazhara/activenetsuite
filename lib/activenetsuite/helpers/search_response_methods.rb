@@ -7,7 +7,7 @@ module SearchResponseMethods
   def_delegators :records, :[]
 
   def_delegators :result, :page_index, :page_size, :search_id, :total_pages,
-    :total_records, :has_more?
+    :total_records, :more?
 
   def each
     records.each do |record|
